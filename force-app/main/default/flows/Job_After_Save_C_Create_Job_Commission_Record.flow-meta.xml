@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <constants>
+        <name>con_ThisFlowName</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Job-After Save C-Async Create Job Commission Record</stringValue>
+        </value>
+    </constants>
+    <description>STAR-5564 - This creates the the job commission record for a given job</description>
+    <environments>Default</environments>
+    <interviewLabel>Job - After Save C - Create Job Commission Record {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job - After Save C - Create Job Commission Record</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Initialize_Job_Commission</targetReference>
+        </connector>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterFormula>NOT({!$Setup.DataAdmin__c.TurnOffFlow__c}) &amp;&amp;
+ISBLANK({!$Record.Job_Commission__c}) &amp;&amp;
+YEAR(TODAY()) = YEAR({!$Record.Created_Day__c})</filterFormula>
+        <object>WorkOrder</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Initialize_Job_Commission</name>
+        <label>Initialize Job Commission</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <flowName>Job_Subflow_InitializeJobCommission</flowName>
+        <inputAssignments>
+            <name>varR_Job</name>
+            <value>
+                <elementReference>$Record</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_FlowName</name>
+        </inputAssignments>
+    </subflows>
+</Flow>

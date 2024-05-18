@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Email to notify change request is completed.</description>
+        <name>emailChangeRequestCompleteNotification</name>
+        <label>emailChangeRequestCompleteNotification</label>
+        <locationX>308</locationX>
+        <locationY>695</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>emailNotifyChangeRequestComplete</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>forT_EmailRecipients</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>salesforce.alerts@firstonsite.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Change Request Completed</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>55.0</apiVersion>
+    <decisions>
+        <name>decAdminFlowBypass</name>
+        <label>decAdminFlowBypass</label>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
+        <defaultConnector>
+            <targetReference>getChangeRequestOwnerName</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Bypass_No</defaultConnectorLabel>
+        <rules>
+            <name>Bypass_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.DataAdmin__c.TurnOffFlow__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Bypass Yes</label>
+        </rules>
+    </decisions>
+    <description>Email alert to notify Change Request is completed.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Email addresses for Change Request Owner &amp; Change Request Account Owner</description>
+        <name>forT_EmailRecipients</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Account__r.Owner.Email} &amp; &quot;,&quot; &amp; {!$Record.Owner:User.Email}</expression>
+    </formulas>
+    <formulas>
+        <description>Detail Link of Change Request</description>
+        <name>recordDetailLinkChangeRequestURL</name>
+        <dataType>String</dataType>
+        <expression>LEFT($Api.Enterprise_Server_URL_510, FIND( &apos;/services&apos;, $Api.Enterprise_Server_URL_510)) &amp; 
+    {!$Record.Id}</expression>
+    </formulas>
+    <interviewLabel>Change Request Completed Email Alert Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Change Request Completed Email Alert Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Change Request Account Name</description>
+        <name>getChangeRequestAccountName</name>
+        <label>getChangeRequestAccountName</label>
+        <locationX>308</locationX>
+        <locationY>575</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>emailChangeRequestCompleteNotification</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Account__r.Name</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>getChangeRequestOwnerName</name>
+        <label>getChangeRequestOwnerName</label>
+        <locationX>308</locationX>
+        <locationY>455</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>getChangeRequestAccountName</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputAssignments>
+            <assignToReference>varChangeRequestOwner</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>decAdminFlowBypass</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Complete</stringValue>
+            </value>
+        </filters>
+        <object>Change_Request__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <description>Email notification to owner that change request is completed.</description>
+        <name>emailNotifyChangeRequestComplete</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Dear {!varChangeRequestOwner}
+Your change request is completed for: {!varChangeRequestAccountName}
+
+Details Below - 
+Change Request Link: {!recordDetailLinkChangeRequestURL}
+Date Created: {!varChangeRequestCreateDate}
+Type: {!varChangeRequestType}
+
+You can also access a list of your Change Requests here:  
+https://restoration.lightning.force.com/lightning/o/Change_Request__c/list?filterName=00B1U00000FEK0FUAX
+
+Thank you,
+Salesforce Admin</text>
+    </textTemplates>
+    <variables>
+        <description>Change Request Account Name</description>
+        <name>varChangeRequestAccountName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Account__r.Name</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Change Request Created Date</description>
+        <name>varChangeRequestCreateDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.CreatedDate</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <name>varChangeRequestOwner</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Name</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Change Request Type</description>
+        <name>varChangeRequestType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Type__c</elementReference>
+        </value>
+    </variables>
+</Flow>

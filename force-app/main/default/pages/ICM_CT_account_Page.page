@@ -1,0 +1,41 @@
+<!--
+Author:SFDC Team Icertis
+Description:This page fetches the contracts associated to account from ICI and dispaly as an related list.
+Copyright © 2017 Icertis Inc.  
+
+     ## Escaped all user supplied values in Controller Class, rest of them handled here
+ 
+-->
+
+<apex:page standardController="account" sidebar="{!showSidebar}" showHeader="{!showHeader}"  extensions="IcertisCLM.ICM_RelatedListController" >
+    
+    <apex:form >
+    <apex:actionFunction reRender="loadComponent" name="ReloadActMethod" action="{!loadRecordsAsync}" immediate="true" oncomplete="callmenubuttonlogic()"/>    
+    </apex:form>
+    <apex:outputPanel id="loadComponent">
+        <!-- ICI Classic UI -->
+        <apex:outputPanel layout="none" rendered="{!$User.UIThemeDisplayed=='Theme3'}">
+        <IcertisCLM:ICM_ClassicRelatedList response="{!responsetxt}" objectName="{!ICMObjectName}" recId="{!currentRecord.id}" gotoLink="{!goToLink}" inline="{!showHeader}" currentPageName="{!currentPageName}" sfObjName="{!SFObjectName}" recordName="{!currentRecord['Name']}" msgString="{!msgString}" errorFlag="{!errorFlag}" isTokenExpired="{!isTokenExpired}" isTokenEmpty="{!IsTokenEmpty}" EntConfigRecord="{!EntityConfigRec}" VisibleBtnList="{!VisibleButtonConfigList}" AmendSysid="{!AmendSysid}" AmendCTTypeName="{!AmendCTTypeName}" ContextUrl="{!ContextUrl}" IsLazyLoadingEnabled="{!IsLazyLoadingEnabled}" LoggedInUserId="{!LoggedInUserId}"  ViewActions="{!ViewActions}" ViewDetails="{!ViewDetails}" />
+        </apex:outputPanel>
+    
+        <!-- ICI Lightning UI -->    
+        <apex:outputPanel layout="none" rendered="{!NOT($User.UIThemeDisplayed == 'Theme3')}">        
+        <IcertisCLM:ICM_LightningRelatedList response="{!responsetxt}" objectName="{!ICMObjectName}" recId="{!currentRecord.id}" gotoLink="{!goToLink}" inline="{!showHeader}" currentPageName="{!currentPageName}" sfObjName="{!SFObjectName}" recordName="{!currentRecord['Name']}" msgString="{!msgString}" errorFlag="{!errorFlag}" relatedListSection="{!IsRelatedListView}" sObjPluralName="{!sfObjPlural}" isTokenExpired="{!isTokenExpired}" isTokenEmpty="{!IsTokenEmpty}" EntConfigRecord="{!EntityConfigRec}" VisibleBtnList="{!VisibleButtonConfigList}" AmendSysid="{!AmendSysid}" AmendCTTypeName="{!AmendCTTypeName}" ContextUrl="{!ContextUrl}" IsLazyLoadingEnabled="{!IsLazyLoadingEnabled}" LoggedInUserId="{!LoggedInUserId}"  ViewActions="{!ViewActions}" ViewDetails="{!ViewDetails}" />   
+        </apex:outputPanel> 
+        <div id="modal_dialog" class="modal"> 
+          <div class="modal-content"> 
+            <div class="title" style="margin-bottom:20px;"></div> 
+            <div style="float:right;"> 
+                <input type="button" style="margin-right:10px;" value="Yes" id="btnYes" /> 
+                <input type="button" value="No" id="btnNo" /> 
+            </div> 
+          </div> 
+        </div> 
+    </apex:outputPanel>    
+    <script>
+        j$(document).ready(function(){
+            ReloadActMethod();
+        });
+    </script>   
+
+</apex:page>

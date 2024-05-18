@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>X0_Days_After_Contract_Email</name>
+        <label>0 Days After Contract Email</label>
+        <locationX>578</locationX>
+        <locationY>276</locationY>
+        <actionName>Contract.Contract_Expiration_0_days</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Contract.Contract_Expiration_0_days</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>X45_Days_Before_Contract_Email</name>
+        <label>45 Days Before  Contract Email</label>
+        <locationX>314</locationX>
+        <locationY>276</locationY>
+        <actionName>Contract.Contract_Expire_Notice</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Contract.Contract_Expire_Notice</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>X90_Days_Before_Contract_Email</name>
+        <label>90 Days Before Contract Email</label>
+        <locationX>50</locationX>
+        <locationY>276</locationY>
+        <actionName>Contract.Contract_Expiration</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Contract.Contract_Expiration</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>59.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>forD_Today</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()</expression>
+    </formulas>
+    <interviewLabel>Contract - Before Save - Expiration Email Notifications {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract - Before Save - Expiration Email Notifications</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <filterFormula>AND(
+ISBLANK({!$Record.EndDate})=false,
+ {!$Setup.DataAdmin__c.TurnOffFlow__c} = false,
+{!$Record.EndDate}&gt;TODAY(),
+{!$Record.Auto_Renew__c}=false
+)</filterFormula>
+        <object>Contract</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>X90_Days_Before_Contract_End_Date</name>
+            <connector>
+                <targetReference>X90_Days_Before_Contract_Email</targetReference>
+            </connector>
+            <label>90 Days Before Contract End Date</label>
+            <offsetNumber>-90</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>EndDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>X45_Days_Before_Contract_End_Date</name>
+            <connector>
+                <targetReference>X45_Days_Before_Contract_Email</targetReference>
+            </connector>
+            <label>45 Days Before Contract End Date</label>
+            <offsetNumber>-45</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>EndDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <scheduledPaths>
+            <name>X0_Days_After_Contract_End_Date</name>
+            <connector>
+                <targetReference>X0_Days_After_Contract_Email</targetReference>
+            </connector>
+            <label>0 Days After Contract End Date</label>
+            <offsetNumber>0</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>EndDate</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

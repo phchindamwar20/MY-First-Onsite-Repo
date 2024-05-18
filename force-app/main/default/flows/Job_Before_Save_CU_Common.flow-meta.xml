@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <assignments>
+        <name>Clone_Reset_Fields</name>
+        <label>Clone Reset Fields</label>
+        <locationX>50</locationX>
+        <locationY>695</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.AR_Balance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Adjustments__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Billed_to_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Budget_Balance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Expected_Costs__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Job_Number_Claim_Priorvalue__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Last_Month_Cost__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Next_Month_Cost__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Number_of_Change_Orders__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Number_of_Files__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Number_of_SOWC_Contracts__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Original_Contract_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Paid_to_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.ROM_Contracted_Sales__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Receivable_Balance__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Service_Territory_Priorvalue__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Total_Cost__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Set_Owner_and_BD_Account_Manager</name>
+        <label>Set Owner and BD Account Manager</label>
+        <locationX>50</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.OwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forT_JobOwner</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.BD_Account_Manager__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forT_BDAccountManager</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_a_Bolt_Integration_User</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Is_a_Bolt_Integration_User</name>
+        <label>Is a Bolt Integration User?</label>
+        <locationX>182</locationX>
+        <locationY>587</locationY>
+        <defaultConnectorLabel>Is a Bolt Integration User</defaultConnectorLabel>
+        <rules>
+            <name>Not_a_Bolt_Integration_User</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.BOLT__c.Is_Bolt_Integration_User__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>forB_IsNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Clone_Reset_Fields</targetReference>
+            </connector>
+            <label>Not a Bolt Integration User</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Call_Center_or_Bolt_Sync_Created_Job</name>
+        <label>Is Call Center or Bolt Sync Created Job?</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <defaultConnector>
+            <targetReference>Is_a_Bolt_Integration_User</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Call_Center_or_Bolt_Sync_Created_Job</name>
+            <conditionLogic>1 AND (2 OR 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record__Prior</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Owner:User.UserRole.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Call_Center</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$User.Alias</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>BOLT</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Owner_and_BD_Account_Manager</targetReference>
+            </connector>
+            <label>Call Center or Bolt Sync Created Job</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>forB_IsNew</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW()</expression>
+    </formulas>
+    <formulas>
+        <name>forT_BDAccountManager</name>
+        <dataType>String</dataType>
+        <expression>If(
+{!$Record.BD_Account_Manager__c} != null, 
+{!$Record.BD_Account_Manager__c} ,
+  If(
+     {!$Record.Account.Owner.Alias} = &quot;BOLT&quot;,
+     &quot;&quot;,
+     {!$Record.Account.OwnerId}
+)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_JobOwner</name>
+        <dataType>String</dataType>
+        <expression>IF ( 
+    OR(
+       {!$Record.Account.Owner.IsActive} = false,
+       {!$Record.Account.Owner.Alias} = &quot;BOLT&quot;
+    ),
+    {!$Record.ServiceTerritory.General_Manager__c} ,
+     {!$Record.Account.OwnerId}
+)</expression>
+    </formulas>
+    <interviewLabel>Job - Before Save CU - Common {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job - Before Save CU - Common</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Call_Center_or_Bolt_Sync_Created_Job</targetReference>
+        </connector>
+        <filterFormula>/*
+The bypass logic for jobs is special, due to rollups required to rollup job to date payments &amp; receivable balance on the account &amp;/or massupdates made via integration or user
+The first condition is as follows
+If bypass is not turned off for the current running user AND EITHER
+1. It is new record that has either the receivable balance or job to date payments filled out
+2. OR is change to the receivable balance
+3. OR is change to the payments received to date
+4. OR is change to the account
+THEN we bypass the process builder and do nothing
+Finally, if we do have process builder turned off for the current user via 
+DataAmin__c.TurnOffProcessBuilder__c IS TRUE, then we bypass the process builder and do nothing
+OR if the Job&apos;s Bypass Automation is TRUE
+ELSE, the process builder executes normally to the next step 
+*/
+NOT((
+    NOT({!$Setup.DataAdmin__c.TurnOffFlow__c})
+   &amp;&amp;
+    (
+      (
+        ISNEW() &amp;&amp; 
+        (
+          {!$Record.Receivable_Balance__c} &lt;&gt; 0 ||  
+          {!$Record.Paid_to_Date__c} &lt;&gt; 0
+        )
+      )
+      || {!$Record__Prior.Receivable_Balance__c} &lt;&gt; {!$Record.Receivable_Balance__c}
+      || {!$Record__Prior.Paid_to_Date__c} &lt;&gt; {!$Record.Paid_to_Date__c}
+     )
+)
+|| {!$Setup.DataAdmin__c.TurnOffFlow__c} 
+|| {!$Record.Bypass_Automation__c} = TRUE
+)</filterFormula>
+        <object>WorkOrder</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

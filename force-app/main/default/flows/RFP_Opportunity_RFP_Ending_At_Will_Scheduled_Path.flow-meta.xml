@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>RFP_Ending_At_Will</name>
+        <label>RFP Ending At Will</label>
+        <locationX>308</locationX>
+        <locationY>288</locationY>
+        <actionName>Opportunity.RFP_Ending_At_Will</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Opportunity.RFP_Ending_At_Will</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>57.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>forB_IsNewRFP</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW() &amp;&amp; {!$Record.RecordType.Name = &quot;RFP&quot;}</expression>
+    </formulas>
+    <formulas>
+        <name>forD_Today</name>
+        <dataType>Date</dataType>
+        <expression>Today()</expression>
+    </formulas>
+    <interviewLabel>RFP Opportunity - {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RFP Opportunity -RFP Ending At-Will - Scheduled Path</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Type_of_Contract__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>At-Will</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Contract_Expiration_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>X60_Days_Before_Opportunity_Contract_Expiration_Date</name>
+            <connector>
+                <targetReference>RFP_Ending_At_Will</targetReference>
+            </connector>
+            <label>60 Days Before Opportunity: Contract Expiration Date</label>
+            <offsetNumber>-60</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>Contract_Expiration_Date__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

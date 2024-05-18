@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Is_Data_Admin_Bypass_Flow</name>
+        <label>Is Data Admin Bypass Flow</label>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
+        <defaultConnector>
+            <targetReference>Update_Protocols_and_Billing_Information_from_Property_then_Account</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Bypass No</defaultConnectorLabel>
+        <rules>
+            <name>Bypass_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.DataAdmin__c.TurnOffFlow__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Bypass Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>forT_BillingCity</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, {!$Record.Property__r.BillingCity},
+&quot;Account&quot;, {!$Record.Account.BillingCity},
+&quot;Portal&quot;, {!$Record.Account.BillingCity},
+{!$Record.Account.BillingCity}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_billingcontactemail</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, {!$Record.Property__r.Billing_Email__c},
+&quot;Account&quot;, {!$Record.Account.Billing_Email__c},
+&quot;Portal&quot;, {!$Record.Account.Billing_Email__c},
+{!$Record.Account.Billing_Email__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_billingcontactname</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, {!$Record.Property__r.Billing_Contact__c},
+&quot;Account&quot;, {!$Record.Account.Billing_Contact__c},
+&quot;Portal&quot;, {!$Record.Account.Billing_Contact__c},
+{!$Record.Account.Billing_Contact__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_billingcontactphone</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, {!$Record.Property__r.Billing_Phone__c},
+&quot;Account&quot;, {!$Record.Account.Billing_Phone__c},
+&quot;Portal&quot;, {!$Record.Account.Billing_Phone__c},
+{!$Record.Account.Billing_Phone__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_BillingCountry</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, TEXT({!$Record.Property__r.BillingCountryCode}),
+&quot;Account&quot;, TEXT({!$Record.Account.BillingCountryCode}),
+&quot;Portal&quot;, TEXT({!$Record.Account.BillingCountryCode}),
+TEXT({!$Record.Account.BillingCountryCode})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_BillingState</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, TEXT({!$Record.Property__r.BillingStateCode}),
+&quot;Account&quot;, TEXT({!$Record.Account.BillingStateCode}),
+&quot;Portal&quot;, TEXT({!$Record.Account.BillingStateCode}),
+TEXT({!$Record.Account.BillingStateCode})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_BillingStreet</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, {!$Record.Property__r.BillingStreet},
+&quot;Account&quot;, {!$Record.Account.BillingStreet},
+&quot;Portal&quot;, {!$Record.Account.BillingStreet},
+{!$Record.Account.BillingStreet}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_BillingZipCode</name>
+        <dataType>String</dataType>
+        <expression>CASE(
+{!$Record.Account.Bill_To__c},
+&quot;Property&quot;, {!$Record.Property__r.BillingPostalCode},
+&quot;Account&quot;, {!$Record.Account.BillingPostalCode},
+&quot;Portal&quot;, {!$Record.Account.BillingPostalCode},
+{!$Record.Account.BillingPostalCode}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyACMTestingProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_ACM_Testing__c}),
+{!$Record.Property__r.Protocols_ACM_Testing__c},
+{!$Record.Account.Protocols_ACM_Testing__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyAdjustersProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Adjusters__c}),
+{!$Record.Property__r.Protocols_Adjusters__c},
+{!$Record.Account.Protocols_Adjusters__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyBillingProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Billing__c}),
+{!$Record.Property__r.Protocols_Billing__c},
+{!$Record.Account.Protocols_Billing__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyBrokerProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Broker__c}),
+{!$Record.Property__r.Protocols_Broker__c},
+{!$Record.Account.Protocols_Broker__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyDFRProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_DFRs__c}),
+{!$Record.Property__r.Protocols_DFRs__c},
+{!$Record.Account.Protocols_DFRs__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyPortalProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Portal__c}),
+{!$Record.Property__r.Protocols_Portal__c},
+{!$Record.Account.Protocols_Portal__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyPricingProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Pricing__c}),
+{!$Record.Property__r.Protocols_Pricing__c},
+{!$Record.Account.Protocols_Pricing__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertySpecialConcernsProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Special_Concerns__c}),
+{!$Record.Property__r.Protocols_Special_Concerns__c},
+{!$Record.Account.Protocols_Special_Concerns__c}
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_PropertyWorkAuthPOProtocols</name>
+        <dataType>String</dataType>
+        <expression>IF(
+!ISBLANK({!$Record.Property__r.Protocols_Work_Auth_PO__c}),
+{!$Record.Property__r.Protocols_Work_Auth_PO__c},
+{!$Record.Account.Protocols_Work_Auth_PO__c}
+)</expression>
+    </formulas>
+    <interviewLabel>Job-Send Protocols and Billing info to Bolt Job-After Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job-Send Protocols and Billing info to Bolt Job-After Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>If there are protocols and billing information at the property level those will default into the job, if not then look up to the account fields</description>
+        <name>Update_Protocols_and_Billing_Information_from_Property_then_Account</name>
+        <label>Update Protocols and Billing Information from Property then Account</label>
+        <locationX>308</locationX>
+        <locationY>455</locationY>
+        <inputAssignments>
+            <field>Billing_Account_Name__c</field>
+            <value>
+                <elementReference>$Record.Account.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_City__c</field>
+            <value>
+                <elementReference>forT_BillingCity</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Contact2__c</field>
+            <value>
+                <elementReference>forT_billingcontactname</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Contact_Email__c</field>
+            <value>
+                <elementReference>forT_billingcontactemail</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Contact_Phone__c</field>
+            <value>
+                <elementReference>forT_billingcontactphone</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Country__c</field>
+            <value>
+                <elementReference>forT_BillingCountry</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Portal__c</field>
+            <value>
+                <elementReference>$Record.Account.Billing_Portal__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_State__c</field>
+            <value>
+                <elementReference>forT_BillingState</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Street__c</field>
+            <value>
+                <elementReference>forT_BillingStreet</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Billing_Zip_Postal_Code__c</field>
+            <value>
+                <elementReference>forT_BillingZipCode</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_ACM_Testing__c</field>
+            <value>
+                <elementReference>forT_PropertyACMTestingProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Adjusters__c</field>
+            <value>
+                <elementReference>forT_PropertyAdjustersProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Billing__c</field>
+            <value>
+                <elementReference>forT_PropertyBillingProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Broker__c</field>
+            <value>
+                <elementReference>forT_PropertyBrokerProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_DFRs__c</field>
+            <value>
+                <elementReference>forT_PropertyDFRProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Portal__c</field>
+            <value>
+                <elementReference>forT_PropertyPortalProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Pricing__c</field>
+            <value>
+                <elementReference>forT_PropertyPricingProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Special_Concerns__c</field>
+            <value>
+                <elementReference>forT_PropertySpecialConcernsProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Protocols_Work_Auth_PO__c</field>
+            <value>
+                <elementReference>forT_PropertyWorkAuthPOProtocols</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Data_Admin_Bypass_Flow</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CreatedById</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>0051U000008x9m0QAA</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Integrate_with_Bolt__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>WorkOrder</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

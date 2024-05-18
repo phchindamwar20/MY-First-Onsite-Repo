@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Post_to_Chatter_Send_For_Approval</name>
+        <label>Post to Chatter Send For Approval</label>
+        <locationX>204</locationX>
+        <locationY>539</locationY>
+        <actionName>chatterPost</actionName>
+        <actionType>chatterPost</actionType>
+        <connector>
+            <targetReference>Datestamp_1</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>text</name>
+            <value>
+                <elementReference>emailBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>subjectNameOrId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>chatterPost</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>59.0</apiVersion>
+    <decisions>
+        <name>Addendum_Executed</name>
+        <label>Addendum Executed</label>
+        <locationX>336</locationX>
+        <locationY>2363</locationY>
+        <defaultConnector>
+            <targetReference>Advanced_Work_Order_Executed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Addendum Executed_No</defaultConnectorLabel>
+        <rules>
+            <name>Addendum_Executed_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>forB_AddedumExecuted</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Revised_End_Date</targetReference>
+            </connector>
+            <label>Addendum Executed_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Advanced_Work_Order_Executed</name>
+        <label>Advanced Work Order Executed?</label>
+        <locationX>336</locationX>
+        <locationY>2663</locationY>
+        <defaultConnector>
+            <targetReference>Cancelled_Contract</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Executed Status on Advanced Work Order No</defaultConnectorLabel>
+        <rules>
+            <name>Executed_Status_on_Advanced_Work_Order_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Executed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Advanced Work Order</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>DateStamp_and_Reviewer_for_Advanced_Work_Order</targetReference>
+            </connector>
+            <label>Executed Status on Advanced Work Order Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Cancelled_Contract</name>
+        <label>Cancelled Contract</label>
+        <locationX>336</locationX>
+        <locationY>2963</locationY>
+        <defaultConnector>
+            <targetReference>Sample_PO_Approved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Contract is Cancelled No</defaultConnectorLabel>
+        <rules>
+            <name>Contract_is_Cancelled_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Cancelled</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Datestamp_and_Reviewer_for_Cancelled_Contract</targetReference>
+            </connector>
+            <label>Contract is Cancelled Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Client_Contract_Executed</name>
+        <label>Client Contract Executed</label>
+        <locationX>336</locationX>
+        <locationY>1847</locationY>
+        <defaultConnector>
+            <targetReference>Addendum_Executed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Client Contract Executed_No</defaultConnectorLabel>
+        <rules>
+            <name>Client_Contract_Executed_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Executed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RecordType.Name</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Client</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Account</targetReference>
+            </connector>
+            <label>Client Contract Executed Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>File_Added_and_Has_Job</name>
+        <label>File Added and Has Job?</label>
+        <locationX>336</locationX>
+        <locationY>4463</locationY>
+        <defaultConnector>
+            <targetReference>File_Added_and_Has_RFP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>File Added_No</defaultConnectorLabel>
+        <rules>
+            <name>File_Added_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Files__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Files__c</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Job__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Run_Subflow_Pass_Files_to_Jobs</targetReference>
+            </connector>
+            <label>File Added_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>File_Added_and_Has_RFP</name>
+        <label>File Added and Has RFP?</label>
+        <locationX>336</locationX>
+        <locationY>4763</locationY>
+        <defaultConnector>
+            <targetReference>Status_Changed_and_Has_RFP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>File Added_No</defaultConnectorLabel>
+        <rules>
+            <name>File_Added_RFP</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Files__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Number_of_Files__c</leftValueReference>
+                <operator>GreaterThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.RFP_Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>File_Sharing_Subflow</targetReference>
+            </connector>
+            <label>File Added_RFP</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Contract_Status_Draft</name>
+        <label>Is Contract Status Draft?</label>
+        <locationX>182</locationX>
+        <locationY>4979</locationY>
+        <defaultConnector>
+            <targetReference>Status_Changed_and_Has_RFP</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Do Nothing</defaultConnectorLabel>
+        <rules>
+            <name>Draft_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Draft</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Contract_Status_to_Send_for_Approval</targetReference>
+            </connector>
+            <label>Draft_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Non_Renewal_of_Master_Agreement</name>
+        <label>Non Renewal of Master Agreement</label>
+        <locationX>336</locationX>
+        <locationY>3563</locationY>
+        <defaultConnector>
+            <targetReference>Rate_Type_or_T_M_Year_updated</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Non Renewal of Master Agreement_No</defaultConnectorLabel>
+        <rules>
+            <name>Non_Renewal_of_Master_Agreement_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.EndDate</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>forD_Today</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Auto_Renew__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Account_CWA_Only</targetReference>
+            </connector>
+            <label>Non Renewal of Master Agreement_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Rate_Type_or_T_M_Year_updated</name>
+        <label>Rate Type or T&amp;M Year updated</label>
+        <locationX>336</locationX>
+        <locationY>3863</locationY>
+        <defaultConnector>
+            <targetReference>Set_Contract_Name</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Rate Type or T&amp;M Year updated_No</defaultConnectorLabel>
+        <rules>
+            <name>Rate_Type_or_T_M_Year_updated_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>forB_RateTypeChanged</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>GetUpdatedAccount.Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>0011U00001Ke2AaQAJ</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Acct_Type_Year</targetReference>
+            </connector>
+            <label>Rate Type or T&amp;M Year updated_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Sample_PO_Approved</name>
+        <label>Sample PO Approved?</label>
+        <locationX>336</locationX>
+        <locationY>3263</locationY>
+        <defaultConnector>
+            <targetReference>Non_Renewal_of_Master_Agreement</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Sample PO Approved_No</defaultConnectorLabel>
+        <rules>
+            <name>Sample_PO_Approved_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Client_Contract_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sample Purchase Order</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>Executed</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Account_PO_Status</targetReference>
+            </connector>
+            <label>Sample PO Approved Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Set_Contract_Name</name>
+        <label>Set Contract Name</label>
+        <locationX>336</locationX>
+        <locationY>4163</locationY>
+        <defaultConnector>
+            <targetReference>File_Added_and_Has_Job</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Set Contract Name_No</defaultConnectorLabel>
+        <rules>
+            <name>Set_Contract_Name_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>forB_SetContractName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Contract_Name_Update</targetReference>
+            </connector>
+            <label>Set Contract Name_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Status_Approved</name>
+        <label>Status Approved?</label>
+        <locationX>336</locationX>
+        <locationY>1247</locationY>
+        <defaultConnector>
+            <targetReference>Status_Customer_Signed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Approved No</defaultConnectorLabel>
+        <rules>
+            <name>Approved_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Approved</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Approved_Datestamp_and_Reviewer</targetReference>
+            </connector>
+            <label>Approved Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>If the Status is changed from Send for Approval to any other status and there is an RFP, update the RFP Stage to Proposal</description>
+        <name>Status_Changed_and_Has_RFP</name>
+        <label>Status Changed and Has RFP?</label>
+        <locationX>336</locationX>
+        <locationY>5471</locationY>
+        <defaultConnectorLabel>Do Nothing</defaultConnectorLabel>
+        <rules>
+            <name>RFPChange_YEs</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RFP_Opportunity__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record__Prior.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Send for Approval</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_RFP_Opportunity_Stage_to_Proposal</targetReference>
+            </connector>
+            <label>RFPChange_YEs</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Status_Customer_Signed</name>
+        <label>Status Customer Signed?</label>
+        <locationX>336</locationX>
+        <locationY>1547</locationY>
+        <defaultConnector>
+            <targetReference>Client_Contract_Executed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Customer Signed_No</defaultConnectorLabel>
+        <rules>
+            <name>Customer_Signed_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>forB_CustomerSigned</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Datestamp</targetReference>
+            </connector>
+            <label>Customer Signed_Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Status_Incomplete</name>
+        <label>Status Incomplete</label>
+        <locationX>336</locationX>
+        <locationY>947</locationY>
+        <defaultConnector>
+            <targetReference>Status_Approved</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Incomplete No</defaultConnectorLabel>
+        <rules>
+            <name>Incomplete_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Incomplete</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>UpdateDatestampand_Reviewer</targetReference>
+            </connector>
+            <label>Incomplete Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Status_Send_for_Approval</name>
+        <label>Status Send for Approval</label>
+        <locationX>336</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Status_Incomplete</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Send for Approval_No</defaultConnectorLabel>
+        <rules>
+            <name>Send_for_Approval_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Send for Approval</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Post_to_Chatter_Send_For_Approval</targetReference>
+            </connector>
+            <label>Send for Approval_Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>forB_AddedumExecuted</name>
+        <dataType>Boolean</dataType>
+        <expression>AND ( 
+{!$Record.RecordType.Name = &quot;Addendum&quot;},
+TEXT({!$Record.Status }) = &quot;Executed&quot;,
+ISCHANGED({!$Record.Status}))</expression>
+    </formulas>
+    <formulas>
+        <name>forB_CustomerSigned</name>
+        <dataType>Boolean</dataType>
+        <expression>ISCHANGED({!$Record.Status}) &amp;&amp;
+ISPICKVAL( {!$Record.Status}, &quot;Customer Signed&quot;)</expression>
+    </formulas>
+    <formulas>
+        <name>forB_DataAdmin</name>
+        <dataType>Boolean</dataType>
+        <expression>{!$Setup.DataAdmin__c.TurnOffFlow__c}</expression>
+    </formulas>
+    <formulas>
+        <name>forB_RateTypeChanged</name>
+        <dataType>Boolean</dataType>
+        <expression>OR ( ISCHANGED( {!$Record.Rate_Type__c }) ,
+ISCHANGED( {!$Record.T_M_Year__c }) )</expression>
+    </formulas>
+    <formulas>
+        <name>forB_SetContractName</name>
+        <dataType>Boolean</dataType>
+        <expression>NOT({!$Setup.DataAdmin__c.TurnOffFlow__c}) &amp;&amp; OR (ISNEW(),ISCHANGED({!$Record.Client_Contract_Type__c}),ISCHANGED({!$Record.CustomerSignedDate})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forD_EndDate</name>
+        <dataType>Date</dataType>
+        <expression>{!$Record.EndDate}</expression>
+    </formulas>
+    <formulas>
+        <name>forD_Today</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()</expression>
+    </formulas>
+    <formulas>
+        <name>forT_AccountContractStatus</name>
+        <dataType>String</dataType>
+        <expression>IF(
+{!$Record.Account.RecordType.Name}= &quot;Property&quot;,
+TEXT({!$Record.Account.Status__c}),
+IF(TEXT({!$Record.Account.Status__c})=&quot;Active&quot;,
+&quot;Active&quot;,
+&quot;Signed&quot;
+)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_AccountContractType</name>
+        <dataType>String</dataType>
+        <expression>IF(
+TEXT({!$Record.Account.Contract_Type__c})=&quot;CWA Only&quot;||
+TEXT({!$Record.Account.Contract_Type__c})=&quot;Covered by Parent&quot;,
+&quot;MSA Only&quot;,
+TEXT({!$Record.Account.Contract_Type__c})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_ContractName</name>
+        <dataType>String</dataType>
+        <expression>IF (  
+$Record.RecordType.DeveloperName = &quot;Client&quot;||$Record.RecordType.DeveloperName = &quot;Non_Disclosure_Agreement&quot;,
+RIGHT(TRIM($Record.Account.Name),65) &amp;&quot;_&quot;&amp; 
+$Record.Client_Contract_Type_Abbr__c &amp;&quot;_&quot;&amp; 
+TEXT($Record.CustomerSignedDate),
+
+IF (  
+AND ( $Record.RecordType.DeveloperName!=&quot;Client&quot;,
+$Record.RecordType.DeveloperName!=&quot;Addendum&quot;,
+$Record.RecordType.DeveloperName!=&quot;Vendor&quot;, $Record.RecordType.DeveloperName!=&quot;Sample_Purchase_Order&quot;),
+$Record.Job__r.WorkOrderNumber &amp;&quot;_&quot;&amp; 
+$Record.Client_Contract_Type_Abbr__c &amp;&quot;_&quot;&amp; 
+TEXT($Record.CustomerSignedDate),
+  
+$Record.Account.Name &amp;&quot;_&quot;&amp; 
+$Record.Client_Contract_Type_Abbr__c &amp;&quot;_&quot;&amp; 
+TeXT(DATEVALUE ( $Record.CreatedDate ))
+)
+)</expression>
+    </formulas>
+    <formulas>
+        <name>forT_LegalReviewer</name>
+        <dataType>String</dataType>
+        <expression>{!$User.FirstName}+ &quot; &quot;+&quot; &quot;+{!$User.LastName}</expression>
+    </formulas>
+    <interviewLabel>Contract - After Save CU - Common {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract - After Save CU - Common</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Content_Document_Link_Records</name>
+        <label>Get Content Document Link Records</label>
+        <locationX>336</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Status_Send_for_Approval</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LinkedEntityId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>ContentDocumentLink</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>GetUpdatedAccount</name>
+        <label>GetUpdatedAccount</label>
+        <locationX>204</locationX>
+        <locationY>2063</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Updated_Executed_Contract</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.AccountId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Account_CWA_Only</name>
+        <label>Account CWA Only</label>
+        <locationX>204</locationX>
+        <locationY>3671</locationY>
+        <connector>
+            <targetReference>Rate_Type_or_T_M_Year_updated</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Contract_Type__c</field>
+            <value>
+                <stringValue>CWA Only</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ValidationBypassDateTime__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Approved_Datestamp_and_Reviewer</name>
+        <label>Approved Datestamp and Reviewer</label>
+        <locationX>204</locationX>
+        <locationY>1355</locationY>
+        <connector>
+            <targetReference>Status_Customer_Signed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Date_Approved_to_Sign__c</field>
+            <value>
+                <elementReference>forD_Today</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Legal_Reviewer1__c</field>
+            <value>
+                <elementReference>forT_LegalReviewer</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Contract_Name_Update</name>
+        <label>Contract Name Update</label>
+        <locationX>204</locationX>
+        <locationY>4271</locationY>
+        <connector>
+            <targetReference>File_Added_and_Has_Job</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>forT_ContractName</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Datestamp</name>
+        <label>Datestamp</label>
+        <locationX>204</locationX>
+        <locationY>1655</locationY>
+        <connector>
+            <targetReference>Client_Contract_Executed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Date_Customer_Signed__c</field>
+            <value>
+                <elementReference>forD_Today</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Datestamp_1</name>
+        <label>Datestamp</label>
+        <locationX>204</locationX>
+        <locationY>647</locationY>
+        <connector>
+            <targetReference>File_Visibility</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Date_In_Approval__c</field>
+            <value>
+                <elementReference>forD_Today</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>DateStamp_and_Reviewer_for_Advanced_Work_Order</name>
+        <label>DateStamp and Reviewer for Advanced Work Order</label>
+        <locationX>204</locationX>
+        <locationY>2771</locationY>
+        <connector>
+            <targetReference>Cancelled_Contract</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Date_Fully_Executed__c</field>
+            <value>
+                <elementReference>forD_Today</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Datestamp_and_Reviewer_for_Cancelled_Contract</name>
+        <label>Datestamp and Reviewer for Cancelled Contract</label>
+        <locationX>204</locationX>
+        <locationY>3071</locationY>
+        <connector>
+            <targetReference>Sample_PO_Approved</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Canceled__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Date_Canceled__c</field>
+            <value>
+                <elementReference>forD_Today</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Legal_Reviewer1__c</field>
+            <value>
+                <elementReference>forT_LegalReviewer</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>File_Visibility</name>
+        <label>File Visibility</label>
+        <locationX>204</locationX>
+        <locationY>755</locationY>
+        <connector>
+            <targetReference>Status_Incomplete</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Visibility</field>
+            <value>
+                <stringValue>AllUsers</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.ContentDocumentLinks</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Account</name>
+        <label>Update Account</label>
+        <locationX>204</locationX>
+        <locationY>1955</locationY>
+        <connector>
+            <targetReference>GetUpdatedAccount</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Contract_Type__c</field>
+            <value>
+                <elementReference>forT_AccountContractType</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MSA_Id__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MSA_Number__c</field>
+            <value>
+                <elementReference>$Record.ContractNumber</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MSA_Rate_Type__c</field>
+            <value>
+                <elementReference>$Record.Rate_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <elementReference>forT_AccountContractStatus</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>T_M_Year__c</field>
+            <value>
+                <elementReference>$Record.T_M_Year__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ValidationBypassDateTime__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Account_PO_Status</name>
+        <label>Update Account PO Status</label>
+        <locationX>204</locationX>
+        <locationY>3371</locationY>
+        <connector>
+            <targetReference>Non_Renewal_of_Master_Agreement</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>PO_Status__c</field>
+            <value>
+                <stringValue>Approved</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ValidationBypassDateTime__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Acct_Type_Year</name>
+        <label>Update Acct Type/Year</label>
+        <locationX>204</locationX>
+        <locationY>3971</locationY>
+        <connector>
+            <targetReference>Set_Contract_Name</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>MSA_Rate_Type__c</field>
+            <value>
+                <elementReference>$Record.Rate_Type__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>T_M_Year__c</field>
+            <value>
+                <elementReference>$Record.T_M_Year__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ValidationBypassDateTime__c</field>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Account</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Contract_Status_to_Send_for_Approval</name>
+        <label>Update Contract Status to Send for Approval</label>
+        <locationX>50</locationX>
+        <locationY>5087</locationY>
+        <connector>
+            <targetReference>Update_RFP_Opportunity_Stage_to_Awaiting_Legal_Review</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Send for Approval</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_Revised_End_Date</name>
+        <label>Update Revised End Date</label>
+        <locationX>204</locationX>
+        <locationY>2471</locationY>
+        <connector>
+            <targetReference>Advanced_Work_Order_Executed</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Revised_Contract_End_Date__c</field>
+            <value>
+                <elementReference>$Record.EndDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record.Original_Contract__r.Related_Contracts__r</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_RFP_Opportunity_Stage_to_Awaiting_Legal_Review</name>
+        <label>Update RFP Opportunity Stage to Awaiting Legal Review</label>
+        <locationX>50</locationX>
+        <locationY>5195</locationY>
+        <connector>
+            <targetReference>Status_Changed_and_Has_RFP</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RFP_Opportunity__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Awaiting Legal Review</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Update_RFP_Opportunity_Stage_to_Proposal</name>
+        <label>Update RFP Opportunity Stage to Proposal</label>
+        <locationX>204</locationX>
+        <locationY>5579</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.RFP_Opportunity__c</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>StageName</field>
+            <value>
+                <stringValue>Proposal Preparation</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Updated_Executed_Contract</name>
+        <label>Updated Executed Contract</label>
+        <locationX>204</locationX>
+        <locationY>2171</locationY>
+        <connector>
+            <targetReference>Addendum_Executed</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Legal_Reviewer1__c</field>
+            <value>
+                <elementReference>forT_LegalReviewer</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Revised_Contract_End_Date__c</field>
+            <value>
+                <elementReference>$Record.EndDate</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Contract</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>UpdateDatestampand_Reviewer</name>
+        <label>UpdateDatestampand Reviewer</label>
+        <locationX>204</locationX>
+        <locationY>1055</locationY>
+        <connector>
+            <targetReference>Status_Approved</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Date_Incomplete__c</field>
+            <value>
+                <elementReference>forD_Today</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Legal_Reviewer1__c</field>
+            <value>
+                <elementReference>forT_LegalReviewer</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>210</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Content_Document_Link_Records</targetReference>
+        </connector>
+        <filterFormula> {!$Setup.DataAdmin__c.TurnOffFlow__c} = false</filterFormula>
+        <object>Contract</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>File_Sharing_Subflow</name>
+        <label>File Sharing - Subflow</label>
+        <locationX>182</locationX>
+        <locationY>4871</locationY>
+        <connector>
+            <targetReference>Is_Contract_Status_Draft</targetReference>
+        </connector>
+        <flowName>File_Sharing_Subflow</flowName>
+        <inputAssignments>
+            <name>varT_GiverId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_ReceiverId</name>
+            <value>
+                <elementReference>$Record.RFP_Opportunity__c</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>Run_Subflow_Pass_Files_to_Jobs</name>
+        <label>Run Subflow Pass Files to Jobs</label>
+        <locationX>204</locationX>
+        <locationY>4571</locationY>
+        <connector>
+            <targetReference>File_Added_and_Has_RFP</targetReference>
+        </connector>
+        <flowName>Contract_Subflow_Pass_Files_to_Jobs</flowName>
+        <inputAssignments>
+            <name>varT_ContractId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_JobId</name>
+            <value>
+                <elementReference>$Record.Job__c</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <textTemplates>
+        <name>emailBody</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hey @{!$Record.OwnerId},
+The legal team has received your contract for {!$Record.Account.Name}and will review for approval.
+Contract Type: {!$Record.Client_Contract_Type__c}
+Pending Job? {!$Record.Pending_Job__c}
+Record Link: https://restoration.lightning.force.com/lightning/r/Contract/{!$Record.Id}/view</text>
+    </textTemplates>
+    <textTemplates>
+        <name>forT_AdvancedWorkOrderEmailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hi @{!$Record.OwnerId},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Your contract for {!$Record.Job__r.Job_Name__c} job (number {!$Record.Job__r.Job_Number_Claim__c} is Executed!&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Congratulations!&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Record link: https://restoration.lightning.force.com/lightning/r/Contract/{!$Record.Id}/view&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>forT_ContractCancelledEmailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hey Legal -&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;The Contract for {!$Record.Account.Name} has been Cancelled. Let me know if you have questions!&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Record: https://restoration.lightning.force.com/lightning/r/Contract/{!$Record.Id}/view&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>forT_ExecutedEmailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hi @{!$Record.OwnerId},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Your {!$Record.Account.Name} contract is Executed! The Account Status has been set to &quot;Active.&quot;&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Any Jobs that were &quot;On Hold&quot; because the contract was missing have been set to &quot;In Progress,&quot; if they have Forecast info and a Job Number. Please be sure to review.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Congratulations!&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Record link: https://restoration.lightning.force.com/lightning/r/Contract/{!$Record.Id}/view&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>textT_ApprovedEmailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hi @ {!$Record.OwnerId},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;The legal team has approved your contract for {!$Record.Account.Name} to sign!&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Please download, sign, and send to the client for signature. When you receive the executed copy, please upload that version to Salesforce and set the Contract Status to &quot;Customer Signed.&quot;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Record link: https://restoration.lightning.force.com/lightning/r/Contract/{!$Record.Id}/view&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>textT_IncompleteEmailBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hey @{!$Record.OwnerId},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;The legal team has marked your {!$Record.Account.Name} contract incomplete.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Incomplete Notes: {!$Record.Incomplete_Notes__c}&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Please contact the Legal team if you have additional questions. If you are able to satisfy the incomplete terms, you may make the change and set the contract record status to &quot;In Approval Process.&quot;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Record link: https://restoration.lightning.force.com/lightning/r/Contract/{!$Record.Id}/view&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

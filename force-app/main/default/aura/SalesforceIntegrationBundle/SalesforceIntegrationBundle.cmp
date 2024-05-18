@@ -1,0 +1,5 @@
+<aura:component controller="SalesforceIntegrationController" implements="force:appHostable,flexipage:availableForAllPageTypes">
+    <aura:attribute name="userinfo" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <ui:outputText value="{!v.userinfo}"/>
+</aura:component>

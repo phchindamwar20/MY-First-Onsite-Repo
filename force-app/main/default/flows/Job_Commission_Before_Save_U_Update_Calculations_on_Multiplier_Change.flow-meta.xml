@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <name>Update_Calculations</name>
+        <label>Update Calculations</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Actual_DepositFirst_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_ActualDepositFirstPaymentAmount</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Actual_Quick_Collection_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_ActualQuickCollectionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Actual_Slow_Collection_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_ActualSlowCollectionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Actual_Total_Commission_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_ActualTotalCommissionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Actual_Total_Commission__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_ActualTotalCommissionPercent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Default_DepositFirst_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_DefaultDepositFirstPaymentAmount</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Default_Quick_Collection_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_DefaultQuickCollectionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Default_Slow_Collection_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_DefaultSlowCollectionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Default_Total_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_DefaultTotalCommissionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Default_Total_Commission__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_DefaultTotalCommissionPercent</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Actual_Total_Collection_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_ActualTotalCollectionPayment</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Default_Total_Collection_Payment_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forC_DefaultTotalCollectionPayment</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>STAR-6264 - Updates the job commission calculations for job commissions not paid when the multiplier changes</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>forC_ActualDepositFirstPaymentAmount</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+   TEXT({!$Record.Actual_Commissionable__c})= &apos;Yes&apos; &amp;&amp;  TEXT({!$Record.Actual_DepositFirst_Payment_Met__c})= &apos;Yes&apos;,
+    {!$Record.Job_Amount__c} * {!$Record.Split_Multiplier__c} * {!$Record.Actual_Deposit_1st_Payment_Incentive__c} / 100,
+    0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_ActualQuickCollectionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>IF (
+    TEXT({!$Record.Actual_Commissionable__c}) = &apos;Yes&apos; &amp;&amp; TEXT({!$Record.Actual_Quick_Collection_Met__c}) = &apos;Yes&apos;,
+    {!$Record.Job_Amount__c} * {!$Record.Split_Multiplier__c} * {!$Record.Actual_Quick_Collection_Incentive__c} / 100,
+    0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_ActualSlowCollectionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+    TEXT({!$Record.Actual_Commissionable__c})= &apos;Yes&apos; &amp;&amp; TEXT({!$Record.Actual_Slow_Collection_Met__c}) = &apos;Yes&apos;,
+    {!$Record.Job_Amount__c} * {!$Record.Split_Multiplier__c} * {!$Record.Actual_Slow_Collection_Incentive__c} / 100,
+    0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_ActualTotalCollectionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>{!forC_ActualQuickCollectionPayment} + {!forC_ActualSlowCollectionPayment}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_ActualTotalCommissionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>{!forC_ActualDepositFirstPaymentAmount} + {!forC_ActualQuickCollectionPayment} + {!forC_ActualSlowCollectionPayment}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_ActualTotalCommissionPercent</name>
+        <dataType>Number</dataType>
+        <expression>100 * {!forC_ActualTotalCommissionPayment} / {!$Record.Job_Amount__c}</expression>
+        <scale>4</scale>
+    </formulas>
+    <formulas>
+        <name>forC_DefaultDepositFirstPaymentAmount</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+   TEXT({!$Record.Default_Commissionable__c}) = &apos;Yes&apos; &amp;&amp; TEXT({!$Record.Default_DepositFirst_Payment_Met__c})=&apos;Yes&apos;,
+    {!$Record.Job_Amount__c} * {!$Record.Split_Multiplier__c} * {!$Record.Default_Deposit_1st_Payment_Incentive__c} / 100,
+    0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_DefaultQuickCollectionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>IF (
+    TEXT({!$Record.Default_Commissionable__c}) = &apos;Yes&apos; &amp;&amp; TEXT({!$Record.Default_Quick_Collection_Met__c})=&apos;Yes&apos;,
+    {!$Record.Job_Amount__c} * {!$Record.Split_Multiplier__c} * {!$Record.Default_Quick_Collection_Incentive__c} / 100,
+    0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_DefaultSlowCollectionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+    TEXT({!$Record.Default_Commissionable__c})= &apos;Yes&apos; &amp;&amp; TEXT({!$Record.Default_Slow_Collection_Met__c})=&apos;Yes&apos;,
+    {!$Record.Job_Amount__c} * {!$Record.Split_Multiplier__c} * {!$Record.Default_Slow_Collection_Incentive__c} / 100,
+    0
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_DefaultTotalCollectionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>{!forC_DefaultQuickCollectionPayment} + {!forC_DefaultSlowCollectionPayment}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_DefaultTotalCommissionPayment</name>
+        <dataType>Currency</dataType>
+        <expression>{!forC_DefaultDepositFirstPaymentAmount} + {!forC_DefaultQuickCollectionPayment} + {!forC_DefaultSlowCollectionPayment}</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>forC_DefaultTotalCommissionPercent</name>
+        <dataType>Currency</dataType>
+        <expression>100 *{!forC_DefaultTotalCommissionPayment} / {!$Record.Job_Amount__c}</expression>
+        <scale>4</scale>
+    </formulas>
+    <interviewLabel>Job Commission - Before Save CU - Update Calculations on Multiplier Change {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job Commission - Before Save U - Update Calculations on Multiplier Change</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Calculations</targetReference>
+        </connector>
+        <filterFormula>{!$Setup.DataAdmin__c.TurnOffFlow__c} = false &amp;&amp;
+(  
+       IsChanged({!$Record.Split_Multiplier__c}) &amp;&amp;
+       TEXT({!$Record.Commission_Status__c}) &lt;&gt; &apos;Paid&apos;
+)</filterFormula>
+        <object>Job_Commission__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+    <triggerOrder>500</triggerOrder>
+</Flow>

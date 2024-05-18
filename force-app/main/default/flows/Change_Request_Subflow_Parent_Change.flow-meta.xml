@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Post_to_Chatter_Parent_Change</name>
+        <label>Post to Chatter Parent Change</label>
+        <locationX>176</locationX>
+        <locationY>278</locationY>
+        <actionName>chatterPost</actionName>
+        <actionType>chatterPost</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>text</name>
+            <value>
+                <stringValue>@[{!getSalesOpsGroupId.Id}] {!ParentChangeChatterMessage}</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>subjectNameOrId</name>
+            <value>
+                <elementReference>recordChangeRequest.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>chatterPost</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>55.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>formulaRecordDetailLinkAccount</name>
+        <dataType>String</dataType>
+        <expression>LEFT( {!$Api.Partner_Server_URL_520}, FIND( &apos;/services&apos;, {!$Api.Partner_Server_URL_520} ))&amp; {!recordChangeRequest.Account__c}</expression>
+    </formulas>
+    <interviewLabel>Change Request - Subflow - Parent Change {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Change Request - Subflow - Parent Change</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>getSalesOpsGroupId</name>
+        <label>getSalesOpsGroupId</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Post_to_Chatter_Parent_Change</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Sales Ops</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CollaborationGroup</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>getSalesOpsGroupId</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>ParentChangeChatterMessage</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Do you approve this Change Request?
+{!recordChangeRequest.Type__c}
+Description: {!recordChangeRequest.Description__c}
+
+Account Name: {!recordChangeRequest.Account__r.Name}
+Ultimate Parent: {!recordChangeRequest.Account__r.Ultimate_Parent__c}
+Account Owner: {!recordChangeRequest.Account__r.Account_Owner_Full_Name__c}
+Account Link: {!formulaRecordDetailLinkAccount}</text>
+    </textTemplates>
+    <variables>
+        <name>recordChangeRequest</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Change_Request__c</objectType>
+    </variables>
+</Flow>

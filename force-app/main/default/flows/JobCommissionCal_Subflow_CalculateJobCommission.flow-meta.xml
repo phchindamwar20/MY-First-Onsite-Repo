@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <assignments>
+        <description>Set Deposit First Payment Info for Default and Actual</description>
+        <name>Set_Deposit_First_Payment_Info</name>
+        <label>Set Deposit First Payment Info</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>varR_JobCommission</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Calculate_Deposit_First_Payment.varR_JobCommission</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Calculate_Total_Collections</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Job_Commission</name>
+        <label>Set Job Commission</label>
+        <locationX>176</locationX>
+        <locationY>674</locationY>
+        <assignmentItems>
+            <assignToReference>varR_JobCommission</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Calculate_Job_Commission.varR_JobCommission</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Set Total Collections Info for Default and Actual</description>
+        <name>Set_Total_Collections_Info</name>
+        <label>Set Total Collections Info</label>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
+        <assignmentItems>
+            <assignToReference>varR_JobCommission</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Calculate_Total_Collections.varR_JobCommission</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Calculate_Job_Commission</targetReference>
+        </connector>
+    </assignments>
+    <constants>
+        <name>con_No</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>No</stringValue>
+        </value>
+    </constants>
+    <constants>
+        <name>con_Yes</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Yes</stringValue>
+        </value>
+    </constants>
+    <description>STAR-5602, STAR-5564, STAR-5512, STAR-6133, STAR-6288, 6289 Calculates the complete default and actual job commissions</description>
+    <environments>Default</environments>
+    <interviewLabel>JobCommissionCal-Subflow-CalculateJobCommission {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>JobCommissionCal-Subflow-CalculateJobCommission</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Calculate_Deposit_First_Payment</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>Calculate the Default and Actual First Payment</description>
+        <name>Calculate_Deposit_First_Payment</name>
+        <label>Calculate Deposit First Payment</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <connector>
+            <targetReference>Set_Deposit_First_Payment_Info</targetReference>
+        </connector>
+        <flowName>JobCommissionCal_Subflow_DepositFirstPayment</flowName>
+        <inputAssignments>
+            <name>varR_JobCommission</name>
+            <value>
+                <elementReference>varR_JobCommission</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <name>Calculate_Job_Commission</name>
+        <label>Calculate Job Commission</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>Set_Job_Commission</targetReference>
+        </connector>
+        <flowName>JobCommissionCal_Subflow_Commissionable</flowName>
+        <inputAssignments>
+            <name>varR_JobCommission</name>
+            <value>
+                <elementReference>varR_JobCommission</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <subflows>
+        <description>Calculate Total Collections for Default and Actual</description>
+        <name>Calculate_Total_Collections</name>
+        <label>Calculate Total Collections</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <connector>
+            <targetReference>Set_Total_Collections_Info</targetReference>
+        </connector>
+        <flowName>JobCommissionCal_Subflow_TotalCollection</flowName>
+        <inputAssignments>
+            <name>varR_JobCommission</name>
+            <value>
+                <elementReference>varR_JobCommission</elementReference>
+            </value>
+        </inputAssignments>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </subflows>
+    <variables>
+        <description>Job Commission Record</description>
+        <name>varR_JobCommission</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Job_Commission__c</objectType>
+    </variables>
+</Flow>

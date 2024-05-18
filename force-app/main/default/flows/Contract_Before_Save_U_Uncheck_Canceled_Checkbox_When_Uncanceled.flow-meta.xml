@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <name>Canceled_is_Unchecked</name>
+        <label>Canceled is Unchecked</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Canceled__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <environments>Default</environments>
+    <interviewLabel>Contract-Before Save U-Uncheck Canceled Checkbox When Uncanceled {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract-Before Save U-Uncheck Canceled Checkbox When Uncanceled</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Canceled_is_Unchecked</targetReference>
+        </connector>
+        <filterFormula>AND(
+  {!$Setup.DataAdmin__c.TurnOffFlow__c} = false,
+  ISCHANGED({!$Record.Status}),
+  OR( 
+    TEXT({!$Record__Prior.Status}) = &apos;Canceled&apos;,
+    TEXT({!$Record__Prior.Status}) = &apos;Cancelled&apos;
+  ),
+  TEXT({!$Record.Status}) != &apos;Canceled&apos;,
+  TEXT({!$Record.Status}) != &apos;Cancelled&apos;
+)</filterFormula>
+        <object>Contract</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

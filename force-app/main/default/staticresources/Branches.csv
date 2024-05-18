@@ -1,0 +1,93 @@
+Name,Active,City,CountryCodeFormula,Currency ISO Code,General Manager: User ID,Description,Location Number,StateCodeFormula,Zip/Postal Code,Region,Legal Entity,Legacy Location Number,Integrate with Bolt?
+Southern California Corp,0,,,USD,,,164,,,West,Interstate Restoration LLC,,0
+Corporate,0,,,USD,,,165,,,Corporate,Interstate Restoration LLC,,1
+San Antonio,1,San Antonio,US,USD,0051U0000080GMW,,166,TX,78216,Central,Interstate Restoration LLC,85,1
+Tallahassee,1,Tallahassee,US,USD,0051U000008lHao,,167,FL,32303,Southeast,Pro Construction L.L.C.,39,1
+National Sales,0,,,USD,,Mark Kissick's team. No jobs associated with this branch.,168,,,Client Solutions,Interstate Restoration LLC,,1
+Fort Myers,1,Fort Myers,US,USD,0051U00000AIwDq,,169,FL,33913,Southeast,Interstate Restoration LLC,,1
+New Orleans,1,New Orleans,US,USD,0051U000009O5n3,,170,LA,70123,Central,Interstate Restoration LLC,88,1
+Charlotte,1,Charlotte,US,USD,0051U000009O0d8,,178,NC,28277,Mid-Atlantic,"Rolyn, LLC",,1
+Richmond,1,Richmond,US,USD,0051U000006QiIr,,177,VA,,Mid-Atlantic,"Rolyn, LLC",77,1
+Fort Worth,0,Fort Worth,US,USD,0051U000007SFEJ,Unchecked Active on 8/28/23 per Rachel's email. Goes live on 1/1/2024,180,TX,76137,Central,Interstate Restoration LLC,,1
+FOS Canada,0,,CA,USD,,,181,,,,,,0
+Corporate-Watermark,0,,,USD,,,171,,,Capital Improvements,"Watermark Restoration, Inc.",,0
+Birmingham-Watermark,0,,,USD,,,172,,,Capital Improvements,"Watermark Restoration, Inc.",,0
+Tampa-Watermark,0,,,USD,,,173,,,Capital Improvements,"Watermark Restoration, Inc.",,0
+Atlanta-Watermark,0,,,USD,,,174,,,Capital Improvements,"Watermark Restoration, Inc.",,0
+Charlotte-Watermark,0,,,USD,,,175,,,Capital Improvements,"Watermark Restoration, Inc.",,0
+Houston-Watermark,0,,,USD,,,176,,,Capital Improvements,"Watermark Restoration, Inc.",,0
+San Diego,0,San Marcos,US,USD,,,182,CA,92078,West,Interstate Restoration LLC,,0
+New York City,1,New York,US,USD,0051U000008l8Ny,,131,NY,10016,Northeast,Maxons Restorations Inc.,69,1
+Wayne,0,Wayne,US,USD,0051U000008kqXt,,68,NJ,7470,Northeast,"Insurance Restoration Specialists, Inc.",68,0
+Indianapolis,1,Indianapolis,US,USD,0051U000008kvMY,,3,IN,46227,Upper Midwest,"Moore Restoration, Inc.",3,1
+Pensacola,1,Pensacola,US,USD,005Pf000000JMeL,158 netsuite Id,158,FL,32503,Southeast,Pro Construction L.L.C.,73,1
+Packout,0,Pensacola,US,USD,,Shaun Carpentier - GM,74,FL,32503,,,74,0
+Monroe Township,1,Monroe Township,US,USD,0051U000008xHzW,New Jersey,157,NJ,8831,Northeast,"Insurance Restoration Specialists, Inc.",76,1
+Spokane,1,Liberty Lake,US,USD,0051U000007zOL5,,145,WA,99019,West,Interstate Restoration LLC,75,1
+Jacksonville,1,Jacksonville,US,USD,0051U000006Js0M,,121,FL,32257,Southeast,Interstate Restoration LLC,66,1
+Dallas,1,Farmers Branch,US,USD,0051U000007SFEJ,,109,TX,75244,Central,Interstate Restoration LLC,26,1
+Oklahoma City,1,Oklahoma City,US,USD,0051U00000AJkEk,,134,OK,73118,Central,Interstate Restoration LLC,67,1
+Asheville,1,Asheville,US,USD,0051U00000AJ044,,102,NC,28806,Mid-Atlantic,"Rolyn, LLC",,1
+Atlanta,1,Atlanta,US,USD,0051U000007n8ec,,103,GA,30336,Mid-Atlantic,"Rolyn, LLC",,1
+Central Corp,0,,,USD,,,118,,,Central,Interstate Restoration LLC,,1
+Charleston,1,Summerville,US,USD,0051U000008480z,,107,SC,29483,Mid-Atlantic,"Rolyn, LLC",,1
+Delray-Closed,0,,,USD,,,122,,,Southeast,"Rolyn, LLC",,0
+Dickinson-Closed,0,,,USD,,,124,,,Central,"Rolyn, LLC",,0
+Greensboro,1,High Point,US,USD,0051U00000AJ044,,114,NC,27260,Mid-Atlantic,"Rolyn, LLC",,1
+IL Corp,0,,,USD,,,129,,,Upper Midwest,"Perfection Property Restoration, Inc.",,0
+Indianapolis Healthcare,1,,,USD,0051U000008kvMY,,119,,,Upper Midwest,"Moore Advanced Services Group, LLC",,1
+Des Moines,1,Des Moines,US,USD,0051U000003qhCA,Change Location number to 132 once live in BOLT and move 39 to Legacy Location Number.,132,IA,50317,Upper Midwest,"Perfection Property Restoration, Inc.",,1
+Long Island,0,Syosset,US,USD,,,135,NY,11791,Northeast,Maxons Restorations Inc.,,0
+Mid Atlantic Corp,1,,,USD,0051U000006QiAs,"Leave active until ""intercompany jobs"" are no longer a thing.",124,,,Mid-Atlantic,"Rolyn, LLC",,1
+MA Regional,0,,,USD,,,137,,,Mid-Atlantic,"Rolyn, LLC",,1
+Miami Corp,0,,,USD,,,139,,,Southeast,"Super Restoration Service Co., LLC",,0
+MW Regional,0,,,USD,,,141,,,Upper Midwest,"Perfection Property Restoration, Inc.",,0
+NY Warehouse,0,,,USD,,,145,,,Northeast,Maxons Restorations Inc.,,0
+Orlando,1,Orlando,US,USD,0051U000006QiCC,,135,FL,32809,Southeast,"Rolyn, LLC",,1
+Philadelphia,1,Aston,US,USD,0051U000008x5mG,,136,PA,19014,Mid-Atlantic,"Rolyn, LLC",,1
+Savannah,1,Savannah,US,USD,0051U000008480z,,141,GA,31408,Mid-Atlantic,"Rolyn, LLC",,1
+Southeast Corp,1,,,USD,0051U000006Js0g,,154,,,Southeast,Interstate Restoration LLC,,1
+Upper Midwest Corp,0,,,USD,,,161,,,Upper Midwest,Interstate Restoration LLC,,1
+Global Corporate,0,,,USD,,,159,,,US Corp,"Bellwether FOS Holdco, Inc.",,0
+Virginia Beach,1,Virginia Beach,US,USD,0051U000006xicf,,151,VA,23452,Mid-Atlantic,"Rolyn, LLC",,1
+West Corp,0,,,USD,,,165,,,West,Interstate Restoration LLC,,1
+White Plains,0,White Plains,US,USD,,,166,NY,10604,Northeast,Maxons Restorations Inc.,,0
+Wilmington,1,Wilmington,US,USD,,,155,NC,,Mid-Atlantic,"Rolyn, LLC",,1
+Milwaukee,1,Milwaukee,US,USD,0051U000008wrIq,,156,WI,53204,Upper Midwest,"Perfection Property Restoration, Inc.",40,1
+Test,0,,,USD,0051U000004spcB,,0,,,US Corp,Interstate Restoration LLC,,0
+Freeport,1,Freeport,US,USD,0051U000003qhCA,Change Location number to 125 once live in BOLT and move 38 to Legacy Location Number.,125,IL,61032,Upper Midwest,"Perfection Property Restoration, Inc.",,1
+Seattle-North,1,Lynnwood,US,USD,0051U000008x9d3,160 is the Netsuite Number and 78 is the Sage Number,145,WA,98087,West,Interstate Restoration LLC,78,1
+Milwaukee-EFWR,0,Milwaukee,US,USD,0051U000003qhCA,NS Id 161,83,WI,53204,Upper Midwest,,,0
+Manassas,1,Manassas,US,USD,0051U000008yBrI,,162,VA,20110,Mid-Atlantic,"Master Maintenance, Inc.",81,1
+Kauai,1,Lihue,US,USD,0051U000008y4Db,"Netsuite Number is is 163, Sage Number is 80",163,HI,96766,West,"Kauai Restoration & Cleaning, Inc.",80,1
+Phoenix,1,Tempe,US,USD,0051U000009O25h,"When branch is converted to BOLT, change Location number to 149",149,AZ,85281,West,Interstate Restoration LLC,12,1
+Anaheim,1,Anaheim,US,USD,0051U000008yEjM,,101,CA,92806,West,Interstate Restoration LLC,5,1
+Oxnard,1,Oxnard,US,USD,0051U000007Oyui,,152,CA,93036,West,Interstate Restoration LLC,34,1
+San Francisco,1,Hayward,US,USD,0051U000007kQiM,Set to 140 upon conversion to bolt,140,CA,94545,West,Interstate Restoration LLC,16,1
+Denver,1,Denver,US,USD,0051U000007ywMU,"When branch is converted to BOLT, change Location number to 123",123,CO,80239,Central,Interstate Restoration LLC,4,1
+Boynton,1,Boynton Beach,US,USD,0051U00000682Za,,105,FL,33426,Southeast,Interstate Restoration LLC,22,1
+Tampa,1,Tampa,US,USD,0051U000006xZpL,,148,FL,33634,Southeast,Interstate Restoration LLC,23,1
+Oahu,1,Waipahu,US,USD,0051U00000682ek,,115,HI,96797,West,Interstate Restoration Hawaii LLC,0,1
+Detroit,1,Livonia,US,USD,0051U000006xd8Q,,128,MI,48150,Upper Midwest,Interstate Restoration LLC,25,1
+Grand Rapids,0,Grandville,US,USD,0051U000006xd8Q,,26,MI,49418,,,26,0
+East,0,E. Rutherford,US,USD,,,28,NJ,7073,,,28,0
+Toledo,0,Toledo,US,USD,,,27,OH,43611,,,27,0
+Austin,1,Spicewood,US,USD,0051U000006JYrJ,,104,TX,78669,Central,Interstate Restoration LLC,30,1
+CORE,0,Ft. Worth,US,USD,,,33,TX,76137,,,33,0
+Houston,1,Houston,US,USD,0051U000008y3CX,,116,TX,77086,Central,Interstate Restoration LLC,32,1
+Seattle-South,1,Kent,US,USD,0051U000007zOL5,,143,WA,98032,West,Interstate Restoration LLC,21,1
+West,0,Liberty Lake,US,USD,,,29,WA,99019,,,29,0
+Client Solutions,1,Ft. Worth,US,USD,0051U0000062Dew,,132,TX,76137,Client Solutions,Interstate Restoration LLC,8,1
+Denver Board-Up,0,,US,USD,,,31,,,,,31,0
+St Louis,1,Maryland Heights,US,USD,0051U000007RcXp,,146,MO,63043,Upper Midwest,Interstate Restoration LLC,35,1
+Kansas City,1,Independence,US,USD,005Pf000000J8I1,,122,MO,64057,Upper Midwest,Interstate Restoration LLC,36,1
+Chicago,1,East Dundee,US,USD,0051U000008yOVP,"When branch is converted to BOLT, change Location number to 120",120,IL,60118,Upper Midwest,"Perfection Property Restoration, Inc.",37,1
+Miami,1,Doral,US,USD,0051U000008x544,,126,FL,33172,Southeast,"Super Restoration Service Co., LLC",42,1
+Shared Services Corp (US & CA),0,Mississauga,CA,USD,0051U000007QRjB,,43,ON,L5T 2W1,Shared Services,"FirstOnsite USA Holdings, Inc.",43,0
+St Louis Contents,1,Maryland Heights,US,USD,0051U000007jMQ6,,147,MO,63043,Upper Midwest,Interstate Restoration LLC,44,1
+Rockville,1,Rockville,US,USD,0051U00000AJAi0,,139,MD,20852,Mid-Atlantic,"Rolyn, LLC",45,1
+San Juan,1,Carolina,US,USD,0051U000009NzUU,,138,PR,983,Southeast,Interstate Restoration LLC,60,1
+Queens,0,,,USD,,,133,,,,,,0
+Northeast Corp,0,,,USD,,,183,,,Northeast,Maxons Restorations Inc.,,1
+Eliminations,0,,,USD,,,179,,,,,,0
+Nashville,0,Nashville,US,USD,,,184,TN,37210,Mid-Atlantic,,,0

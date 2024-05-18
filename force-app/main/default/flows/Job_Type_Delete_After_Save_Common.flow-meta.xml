@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <decisions>
+        <name>Bypass</name>
+        <label>Bypass?</label>
+        <locationX>182</locationX>
+        <locationY>311</locationY>
+        <defaultConnectorLabel>Bypass Flow</defaultConnectorLabel>
+        <rules>
+            <name>Execute_Flow</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.DataAdmin__c.TurnOffFlow__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Post_Delete_Bolt_Events</targetReference>
+            </connector>
+            <label>Execute Flow</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>forT_StatusMessage</name>
+        <dataType>String</dataType>
+        <expression>&apos;Job Type &apos; + {!$Record.Id} + &apos;, with Department Code &apos; + {!$Record.Department_Code__c} + &apos;, Job Type Name: &apos; + {!$Record.Name} + &apos; has been deleted.&apos;</expression>
+    </formulas>
+    <interviewLabel>Job Type - Delete - After Save - Common {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Job Type - Delete - After Save - Common</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Bypass</targetReference>
+        </connector>
+        <object>WorkType</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Post_Delete_Bolt_Events</name>
+        <label>Post Delete Bolt Events</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <flowName>Bolt_Event_Subflow_Post_Delete_BoltEvents</flowName>
+        <inputAssignments>
+            <name>varT_Id</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_ObjectName</name>
+            <value>
+                <stringValue>Job Type</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_StatusMessage</name>
+            <value>
+                <elementReference>forT_StatusMessage</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

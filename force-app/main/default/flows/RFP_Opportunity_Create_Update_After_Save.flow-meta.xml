@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>RFP_Created</name>
+        <label>RFP Created</label>
+        <locationX>242</locationX>
+        <locationY>575</locationY>
+        <actionName>Opportunity.RFP_Created</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>Opportunity.RFP_Created</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Is_Bypass_Flow</name>
+        <label>Is Bypass Flow?</label>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
+        <defaultConnector>
+            <targetReference>Is_RFP_Opportunity_Created</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>FALSE_Bypass</defaultConnectorLabel>
+        <rules>
+            <name>TRUE_Bypass</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.DataAdmin__c.TurnOffFlow__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>TRUE_Bypass</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_RFP_Opportunity_Created</name>
+        <label>Is RFP Opportunity Created?</label>
+        <locationX>374</locationX>
+        <locationY>455</locationY>
+        <defaultConnectorLabel>Do Nothing</defaultConnectorLabel>
+        <rules>
+            <name>NewRFP_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>forB_IsNewRFP</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>RFP_Created</targetReference>
+            </connector>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>NewRFP_Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>forB_IsNewRFP</name>
+        <dataType>Boolean</dataType>
+        <expression>ISNEW() &amp;&amp; {!$Record.RecordType.Name = &quot;RFP&quot;}</expression>
+    </formulas>
+    <formulas>
+        <name>forD_Today</name>
+        <dataType>Date</dataType>
+        <expression>Today()</expression>
+    </formulas>
+    <interviewLabel>RFP Opportunity - Create Update - After Save {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RFP Opportunity - Create Update - After Save</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Bypass_Flow</targetReference>
+        </connector>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <formulas>
+        <name>Last30Days</name>
+        <dataType>Date</dataType>
+        <expression>({!$Flow.CurrentDate}-30)</expression>
+    </formulas>
+    <interviewLabel>Delete Paused flows {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Delete Paused flows</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordDeletes>
+        <name>Auto_Delete_Paused_flows_after_30_Days</name>
+        <label>Auto Delete Paused flows after 30 Days</label>
+        <locationX>177</locationX>
+        <locationY>220</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>InterviewLabel</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>Create Job Records</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>CreatedDate</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <elementReference>Last30Days</elementReference>
+            </value>
+        </filters>
+        <object>FlowInterview</object>
+    </recordDeletes>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Auto_Delete_Paused_flows_after_30_Days</targetReference>
+        </connector>
+    </start>
+    <status>Draft</status>
+</Flow>

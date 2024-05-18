@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Email Change Request to Account Owner of Losing Record</description>
+        <name>emailMergeChangeRequest</name>
+        <label>emailMergeChangeRequest</label>
+        <locationX>308</locationX>
+        <locationY>575</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>emailMergeAccountChangeRequest</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Losing_Merge_Record__r.Owner.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>salesforce.alerts@firstonsite.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Change Request Submitted</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>55.0</apiVersion>
+    <decisions>
+        <name>decAdminBypassFlow</name>
+        <label>decAdminBypassFlow</label>
+        <locationX>176</locationX>
+        <locationY>335</locationY>
+        <defaultConnector>
+            <targetReference>getChangeRequestOwnerName</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Bypass No</defaultConnectorLabel>
+        <rules>
+            <name>Bypass_Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Setup.DataAdmin__c.TurnOffFlow__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Bypass Yes</label>
+        </rules>
+    </decisions>
+    <description>Notify owner of &apos;losing&apos; record of a merge request.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>Losing Record Detail Link</description>
+        <name>recordDetailLinkLosingRecordURL</name>
+        <dataType>String</dataType>
+        <expression>LEFT( {!$Api.Partner_Server_URL_520}, FIND( &apos;/services&apos;, {!$Api.Partner_Server_URL_520} ))&amp;{!$Record.Losing_Merge_Record__r.Id}</expression>
+    </formulas>
+    <formulas>
+        <description>Detail Link to referring Record URL</description>
+        <name>recordDetailLinkRecordURL</name>
+        <dataType>String</dataType>
+        <expression>LEFT($Api.Enterprise_Server_URL_510, FIND( &apos;/services&apos;, $Api.Enterprise_Server_URL_510)) &amp; 
+    {!$Record.Id}</expression>
+    </formulas>
+    <formulas>
+        <description>Winning record - or - Record the Merge Change Request was created on.</description>
+        <name>recordDetailLinkWinningRecordURL</name>
+        <dataType>String</dataType>
+        <expression>LEFT( {!$Api.Partner_Server_URL_520}, FIND( &apos;/services&apos;, {!$Api.Partner_Server_URL_520} ))&amp;{!$Record.Account__c}</expression>
+    </formulas>
+    <interviewLabel>Change Request Email Alert Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Change Request Merge Email Alert Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>getChangeRequestOwnerName</name>
+        <label>getChangeRequestOwnerName</label>
+        <locationX>308</locationX>
+        <locationY>455</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>emailMergeChangeRequest</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </filters>
+        <object>User</object>
+        <outputAssignments>
+            <assignToReference>varChangeRequestOwner</assignToReference>
+            <field>Name</field>
+        </outputAssignments>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>decAdminBypassFlow</targetReference>
+        </connector>
+        <filterLogic>1 OR 2</filterLogic>
+        <filters>
+            <field>Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Merge Accounts</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Merge Properties</stringValue>
+            </value>
+        </filters>
+        <object>Change_Request__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>emailMergeAccountChangeRequest</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Dear {!varLosingRecordOwner}&lt;/p&gt;&lt;p&gt;{!varChangeRequestOwner} has created a Change Request to merge a record. Click this link to view the actual &lt;a href=&quot;{!recordDetailLinkRecordURL}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Change Request&lt;/a&gt;&lt;/p&gt;&lt;p&gt;The record you own was tagged to be removed in this merge. &lt;/p&gt;&lt;p&gt;Click this link to view the account to be removed: &lt;a href=&quot;{!recordDetailLinkLosingRecordURL}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!varLosingRecordAccountName}&lt;/a&gt; &lt;/p&gt;&lt;p&gt;Account to remain: &lt;a href=&quot;{!recordDetailLinkWinningRecordURL}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;{!$Record.Account__r.Name}&lt;/a&gt; &lt;/p&gt;&lt;p&gt;If you disagree with this merge, please work with {!varChangeRequestOwner} to remedy. &lt;/p&gt;&lt;p&gt;If you need escalation on this issue, please forward this message to: salesops@firstonsite.com&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thank you!&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>varChangeRequestAccountName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Account__r.Name</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Change Request Owner/Creator</description>
+        <name>varChangeRequestOwner</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Losing Merge Record Account Owner Full Name</description>
+        <name>varLosingMergeRecordOwner</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Losing_Merge_Record__r.Account_Owner_Full_Name__c</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Losing Record Account Name</description>
+        <name>varLosingRecordAccountName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Losing_Merge_Record__r.Name</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Losing Record Account Owner</description>
+        <name>varLosingRecordOwner</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>varLosingMergeRecordOwner</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>2nd Variable for the Winning Record Detail Link</description>
+        <name>varWinningRecord</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>varWinningRecordDetailLink</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Winning Merge Record Detail Link</description>
+        <name>varWinningRecordDetailLink</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>$Record.Account__r.Id</elementReference>
+        </value>
+    </variables>
+</Flow>

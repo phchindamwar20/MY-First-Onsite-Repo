@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>59.0</apiVersion>
+    <customErrors>
+        <description>this error message will show the record page</description>
+        <name>Prevent_Account_Deletion</name>
+        <label>Prevent Account Deletion</label>
+        <locationX>50</locationX>
+        <locationY>503</locationY>
+        <customErrorMessages>
+            <errorMessage>{!$Label.ERROR_ACC_NO_DEL_WITH_JOBS}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Account_is_with_Jobs_Deleting</name>
+        <label>Account is with Jobs Deleting?</label>
+        <locationX>182</locationX>
+        <locationY>395</locationY>
+        <defaultConnector>
+            <targetReference>Post_Delete_Bolt_Events</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Account without Jobs</defaultConnectorLabel>
+        <rules>
+            <name>Account_with_Jobs</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Jobs_related_to_accoount.AccountId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Prevent_Account_Deletion</targetReference>
+            </connector>
+            <label>Account with Jobs</label>
+        </rules>
+    </decisions>
+    <description>New version with prevent deletion logic</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>forT_StatusMessage</name>
+        <dataType>String</dataType>
+        <expression>&apos;Account &apos; + {!$Record.Id} + &apos;, with Account Number &apos; + {!$Record.Account_Number__c} + &apos;, Account Name: &apos; + {!$Record.Name} + &apos; and RecordType &apos; + {!$Record.RecordType.Name} + &apos; has been deleted.&apos;</expression>
+    </formulas>
+    <interviewLabel>Account - After Save Delete - Common {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Account - After Save Delete - Common</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>we are fetching the job related to account</description>
+        <name>Get_Jobs_related_to_accoount</name>
+        <label>Get Jobs related to Account</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Account_is_with_Jobs_Deleting</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Property__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>WorkOrder</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Jobs_related_to_accoount</targetReference>
+        </connector>
+        <filterFormula>{!$Setup.DataAdmin__c.TurnOffFlow__c}=false</filterFormula>
+        <object>Account</object>
+        <recordTriggerType>Delete</recordTriggerType>
+        <triggerType>RecordBeforeDelete</triggerType>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Post_Delete_Bolt_Events</name>
+        <label>Post Delete Bolt Events</label>
+        <locationX>314</locationX>
+        <locationY>503</locationY>
+        <flowName>Bolt_Event_Subflow_Post_Delete_BoltEvents</flowName>
+        <inputAssignments>
+            <name>varT_Id</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_ObjectName</name>
+            <value>
+                <stringValue>Account</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varT_StatusMessage</name>
+            <value>
+                <elementReference>forT_StatusMessage</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+</Flow>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <assignments>
+        <description>This assigns who and when a SIP field is changed</description>
+        <name>Assign_SIP_Updated</name>
+        <label>Assign SIP Updated</label>
+        <locationX>314</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Last_SIP_Updated_By__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>forT_FlowUserName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Last_SIP_Update_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Last_SIP_Info_Verified_Date__c</assignToReference>
+            <operator>Assign</operator>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Assigning the verified date to the field when the Verified By is entered.</description>
+        <name>Assign_Verified_Date</name>
+        <label>Assign Verified Date</label>
+        <locationX>50</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Last_SIP_Info_Verified_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>What_is_the_reason_for_the_change</name>
+        <label>What is the reason for the change?</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <defaultConnector>
+            <targetReference>Assign_SIP_Updated</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>SIP Field is Changed</defaultConnectorLabel>
+        <rules>
+            <name>Verified_By_Entered</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Last_SIP_Info_Verified_By__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Verified_Date</targetReference>
+            </connector>
+            <label>Verified By Entered</label>
+        </rules>
+    </decisions>
+    <description>This flow will update the SIP Fields based on who and when updates certain user fields.
+STAR-6465</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>forT_FlowUserName</name>
+        <dataType>String</dataType>
+        <expression>{!$User.FirstName}&amp;&quot; &quot;&amp;{!$User.LastName}</expression>
+    </formulas>
+    <interviewLabel>Use {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>User-BeforeSave-C-SIPChanges</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>What_is_the_reason_for_the_change</targetReference>
+        </connector>
+        <filterFormula>AND(
+{!$Setup.DataAdmin__c.TurnOffFlow__c}  = false,
+OR (
+ISCHANGED({!$Record.Associate_Id__c}),
+ISCHANGED({!$Record.Sales_Commissionable_User__c}),
+ISCHANGED({!$Record.Status__c}),
+ISCHANGED({!$Record.Compensation_Type__c}),
+ISCHANGED({!$Record.Plan_Start_Date__c}),
+ISCHANGED({!$Record.Plan_End_Date__c}),
+ISCHANGED({!$Record.Annual_Sales_Goal__c}),
+ISCHANGED({!$Record.Payroll_Company_Code__c}),
+ISCHANGED({!$Record.File_Number__c}),
+ISCHANGED({!$Record.Position_Id__c}),
+ISCHANGED({!$Record.Hire_Date__c}),
+ISCHANGED({!$Record.Salary__c}),
+ISCHANGED({!$Record.Termination_Date__c}),
+ISCHANGED({!$Record.Home_Cost_Number_Code__c})
+
+      ) 
+   )</filterFormula>
+        <object>User</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>
