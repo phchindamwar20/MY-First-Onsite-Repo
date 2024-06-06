@@ -1,1 +1,0 @@
-<apex:page standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sideBar="false" tabStyle="Opportunity" standardController="Opportunity"><CADragNDrop:DND /></apex:page>

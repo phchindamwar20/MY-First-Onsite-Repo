@@ -1,1 +1,0 @@
-<apex:page standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sideBar="false" tabStyle="WorkOrder" standardController="WorkOrder"><CADragNDrop:DND /></apex:page>

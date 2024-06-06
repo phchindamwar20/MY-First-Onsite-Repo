@@ -1,3 +1,0 @@
-<apex:page tabStyle="ICM_Logs__tab" lightningStylesheets="yes" >
-<apex:enhancedList type="IcertisCLM__ICM_ErrorLogs__c" customizable="true" height="600" />
-</apex:page>

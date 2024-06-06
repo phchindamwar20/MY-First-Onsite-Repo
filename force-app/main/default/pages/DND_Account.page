@@ -1,1 +1,0 @@
-<apex:page standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sideBar="false" tabStyle="Account" standardController="Account"><CADragNDrop:DND /></apex:page>

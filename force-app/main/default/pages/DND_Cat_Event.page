@@ -1,1 +1,0 @@
-<apex:page standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sideBar="false" tabStyle="Area_Wide_Event__c" standardController="Area_Wide_Event__c"><CADragNDrop:DND /></apex:page>

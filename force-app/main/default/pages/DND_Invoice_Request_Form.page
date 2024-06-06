@@ -1,1 +1,0 @@
-<apex:page standardStylesheets="false" applyHtmlTag="false" applyBodyTag="false" showHeader="false" sideBar="false" tabStyle="Invoice_Request_Form__c" standardController="Invoice_Request_Form__c"><CADragNDrop:DND /></apex:page>
